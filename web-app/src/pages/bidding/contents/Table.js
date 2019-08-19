@@ -13,14 +13,14 @@ export default class Table extends Component {
         </thead>
         <tbody >
           {this.props.items.map((item) => {
-            return(
-              <tr key={item.id}>
-                <th>{item.id.toNumber()}</th>
-                <td>{item.name}</td>
-                <td>{item.bidValueDollar.toNumber() === 0 
-                ? item.bidValueStarting.toNumber() : item.bidValueDollar.toNumber() }
-                </td>
-              </tr>
+            return( !item.ended &&
+                <tr key={item.id}>
+                  <th>{item.id.toNumber()}</th>
+                  <td>{item.name}</td>
+                  <td>{item.bidValueDollar.toNumber() === 0 
+                  ? item.bidValueStarting.toNumber() : item.bidValueDollar.toNumber() }
+                  </td>
+                </tr>
             )
           })}
         </tbody>

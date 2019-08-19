@@ -18,13 +18,11 @@ export default class form extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.bid(this.state.item, this.state.bid)
-  }
-
-  handleOnClick = (event) => {
-    event.preventDefault();
-    // console.log("clicked")
-    this.props.endAuction(this.state)
+    if(this.props.owner) {
+      this.props.func(this.state.item)
+    } else {
+      this.props.func(this.state.item, this.state.bid)
+    }
   }
 
   render() {
@@ -35,17 +33,24 @@ export default class form extends Component {
           <select value={this.state.selectedItem} name="item" onChange={this.handleOnChange} className='form-control'>
           <option value="">Select an option</option>
             {this.props.items.map((item) => {
-              return(
-                <option key={item.id} value={item.id}>{item.name}</option>
+              return( !item.ended && 
+                  <option key={item.id} value={item.id}>{item.name}</option>
+                
               )
             })}
           </select>
         </div>
-        <input type="number" name="bid" value={this.state.bidValueDollar} onChange={this.handleOnChange} />
-        <button type='submit' className='btn btn-primary'>Bid</button>
-        <hr />
-        <button type='button' onClick={this.handleOnClick} className='btn btn-primary'>End Auction</button>
-        <hr />
+        {this.props.owner ? 
+          <div>
+            <button type='submit' className='btn btn-primary'>End Auction</button>
+            <hr />
+          </div>  
+        : <div>
+            <input type="number" name="bid" value={this.state.bidValueDollar} onChange={this.handleOnChange} />
+            <button type='submit' className='btn btn-primary'>Bid</button>
+            <hr />
+          </div>
+        }
       </form>
     )
   }

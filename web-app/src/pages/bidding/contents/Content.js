@@ -8,9 +8,12 @@ export default class Content extends Component {
       <div>
         <Table key={this.props.items.id} items={this.props.items} />
         <hr/>
-        { !this.props.hasBid ?
-          <Form items={this.props.items} bid={this.props.bid} />
-          : null
+        { 
+          <Form 
+            items={this.props.items} 
+            func={this.props.owner ? this.props.end: this.props.bid} 
+            owner={this.props.owner}
+          />
         }
         <p>Your account: {this.props.account}</p>
       </div>

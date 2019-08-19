@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import renderer from 'react-test-renderer'
 import { renderInRouter } from 'test-helpers/router'
-import { DApp } from './DApp'
+import { ItemOwner } from './ItemOwner'
 
 const testAccounts = [
   '0x627306090abab3a6e1400e9345bc60c78a8bef57'
@@ -23,29 +23,29 @@ const testContract = {
   }
 }
 
-const renderDAppInRoute = routeProps =>
-  <DApp accounts={testAccounts}
+const renderMyItemsInRoute = routeProps =>
+  <ItemOwner accounts={testAccounts}
     contract={testContract}
     {...routeProps} />
 
-let dappInRoute
+let itemOwnerInRoute
 
 beforeEach(() => {
-  dappInRoute = renderInRouter(
-    renderDAppInRoute,
-    '/dapp')
+  itemOwnerInRoute = renderInRouter(
+    renderItemOwnerInRoute,
+    '/myItems')
 })
 
 it('renders without crashing', async () => {
   const div = document.createElement('div')
-  await ReactDOM.render(dappInRoute, div)
+  await ReactDOM.render(itemOwnerInRoute, div)
 })
 
 it('renders correctly', async () => {
-  const dapp = await renderer
-    .create(dappInRoute)
+  const itemOwner = await renderer
+    .create(itemOwnerInRoute)
   await waitForAsyncCallsToComplete()
-  expect(dapp.toJSON()).toMatchSnapshot()
+  expect(itemOwner.toJSON()).toMatchSnapshot()
 })
 
 const waitForAsyncCallsToComplete = async () => {
