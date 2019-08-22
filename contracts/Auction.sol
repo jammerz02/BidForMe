@@ -63,10 +63,7 @@ contract Auction {
         lastBidder = items[_ItemId].highestBidder;
 
         if (highestBid != 0) { // bid value should not be 0 to be valid
-            // bid value in ether should be less than the new bid value
-            if (items[_ItemId].bidValueWei < msg.value) {
-                lastBidder.transfer(highestBid);
-            }
+            pendingReturns[lastBidder] += highestBid;
         }
         // record the bidder address
         items[_ItemId].highestBidder = msg.sender;
@@ -81,8 +78,24 @@ contract Auction {
         emit bidEvent(_ItemId, msg.sender, _bidAmount, msg.value);
     }
 
-    function auctionEnd (uint _ItemId) public {
-        // require valid selected item
+    function withdraw() public payable returns (bool) {
+        uint amount = pendingReturns[msg.sender];
+        if (amount > 0) {
+            pendingReturns[msg.sender] = 0;
+            if (!msg.sender.send(amount)) {
+                // No need to call throw here, just reset the amount owing
+                pendingReturns[msg.sender] = amount;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function auctionEnd (uint _ItemId) public payable {
+        // require Item auction is not yet ended
+        require(!items[_ItemId].ended,"You already ended this auction.");
+
+        // require a valid item id
         require(_ItemId > 0 && _ItemId <= itemsCount,"selected item is invalid");
 
         // require Item owner
@@ -90,9 +103,6 @@ contract Auction {
 
         // require bid value is not 0
         require(items[_ItemId].bidValueDollar != 0,"This Auction doesn't have any bids.");
-
-        // require Item auction is not yet ended
-        require(!items[_ItemId].ended,"You already ended this auction.");
 
         // record Item auction has ended
         items[_ItemId].ended = true;
