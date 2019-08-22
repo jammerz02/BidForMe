@@ -20,10 +20,10 @@ class DApp extends React.Component {
   }
 
   async componentDidMount () {
-     await this.getValues()
+     await this.getItems()
   }
 
-  getValues = async () => {
+  getItems = async () => {
     const { accounts, contract } = this.props
     this.setState({account: accounts[0], loading: true})
     this.watchEvents();
@@ -83,7 +83,7 @@ class DApp extends React.Component {
               // gas: 300000,
               // data: contract.address
            })
-          this.getValues()
+          this.getItems()
        } else {
         alert(`It seems that your bid does not exceed the highest bid.`)
        }
@@ -91,6 +91,8 @@ class DApp extends React.Component {
       alert(`Please select an item.`)
     }
   }
+
+  
 
   endAuction() {
     const { 
