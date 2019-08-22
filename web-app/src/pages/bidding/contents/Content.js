@@ -11,7 +11,8 @@ export default class Content extends Component {
         { 
           <Form 
             items={this.props.items} 
-            bid={this.props.bid} 
+            bid={this.props.bid}
+            withdrawBId={this.props.withdrawBId} 
             end={this.props.end}
             owner={this.props.owner}
           />

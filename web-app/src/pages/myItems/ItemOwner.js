@@ -25,12 +25,11 @@ class ItemOwner extends React.Component {
     this.setState({account: accounts[0], loading: true})
     this.watchEvents();
     const response = await contract.itemsCount()
-    this.state.items = [];
+    const items = []
       for (var i = 1; i <= response; i++) {
         await contract.items(i).then((item) => {
           const account = this.state.account.toLowerCase()
           const itemOwner = item[1]
-          const items = [...this.state.items]
           if(itemOwner === account && !item[6]) {
             items.push({
               id: item[0],
@@ -46,7 +45,6 @@ class ItemOwner extends React.Component {
         });
       }
       this.setState({ loading: false })
-     //await this.getValues()
   }
 
   getValues = async () => {
@@ -97,7 +95,6 @@ class ItemOwner extends React.Component {
 
   endAuction = async (itemId) =>  {
     const { 
-      // web3,
       accounts,
       contract,
      // secondaccounts
@@ -114,18 +111,8 @@ class ItemOwner extends React.Component {
   }
 
   render () {
-    // Uncomment to use web3, accounts or the contract:
-    // const { web3, accounts, contract } = this.props
-   // const { items } = this.state
     return (
       <Wrapper>
-        {/* <h1>My DApp</h1>
-        <div>
-          <P>Current Balance: {balance}</P>
-          <Button leftMargin onClick={this.getValue}>Refresh...</Button>
-        </div>
-        <Button onClick={this.storeValue}>Add 5 to the account balance</Button>
-        <AppNavigation location={this.props.location} /> */}
         <h1> Bid For Me</h1>
         <br/>
         { this.state.loading

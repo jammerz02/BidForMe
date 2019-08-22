@@ -91,6 +91,15 @@ contract Auction {
         return true;
     }
 
+    function withdrawAmount() public view returns (bool) {
+        uint amount = pendingReturns[msg.sender];
+        if(amount > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function auctionEnd (uint _ItemId) public payable {
         // require Item auction is not yet ended
         require(!items[_ItemId].ended,"You already ended this auction.");
