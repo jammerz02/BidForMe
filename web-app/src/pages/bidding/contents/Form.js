@@ -19,9 +19,9 @@ export default class form extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     if(this.props.owner) {
-      this.props.func(this.state.item)
+      this.props.end(this.state.item)
     } else {
-      this.props.func(this.state.item, this.state.bid)
+      this.props.bid(this.state.item, this.state.bid)
     }
   }
 

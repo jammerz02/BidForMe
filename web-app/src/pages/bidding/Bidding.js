@@ -58,7 +58,9 @@ class Bidding extends React.Component {
             endedCounter: endCount
           })
         });
+        
       }
+      
       this.setState({ loading: false })
   }
 
@@ -119,6 +121,10 @@ class Bidding extends React.Component {
       { 
         from: this.state.account
      })
+    //  .then(err,result) {
+    //    console.log(err)
+    //    console.log(result)
+    //  }
   }
 
   render () {
@@ -142,7 +148,9 @@ class Bidding extends React.Component {
               account={this.state.account}
               items={this.state.items}
               owner={this.state.owner}
-              bid={this.bid} />
+              bid={this.bid}
+              end={this.endAuction}
+            />
         }
         <AppNavigation location={this.props.location} />
       </Wrapper>

@@ -11,9 +11,11 @@ export default class Content extends Component {
         { 
           <Form 
             items={this.props.items} 
-            func={this.props.owner ? this.props.end: this.props.bid} 
+            bid={this.props.bid} 
+            end={this.props.end}
             owner={this.props.owner}
           />
+          
         }
         <p>Your account: {this.props.account}</p>
       </div>

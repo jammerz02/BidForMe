@@ -82,6 +82,9 @@ contract Auction {
     }
 
     function auctionEnd (uint _ItemId) public {
+        // require valid selected item
+        require(_ItemId > 0 && _ItemId <= itemsCount,"selected item is invalid");
+
         // require Item owner
         require(msg.sender == items[_ItemId].ItemOwner,"You are not the owner of this auction.");
 
