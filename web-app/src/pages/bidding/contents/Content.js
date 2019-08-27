@@ -1,25 +1,24 @@
-import React, { Component } from 'react'
+import React, { memo } from 'react'
 import Table from './Table'
 import Form from './Form'
 
-export default class Content extends Component {
-  render() {
-    return (
-      <div>
-        <Table key={this.props.items.id} items={this.props.items} />
-        <hr/>
-        { 
-          <Form 
-            items={this.props.items} 
-            bid={this.props.bid}
-            withdrawBId={this.props.withdrawBId} 
-            end={this.props.end}
-            owner={this.props.owner}
-          />
-          
-        }
-        <p>Your account: {this.props.account}</p>
-      </div>
-    )
-  }
+const Content = (props) => {
+  return (
+    <div>
+      <Table key={props.items.id} items={props.items} />
+      <hr/>
+      { 
+        <Form 
+          items={props.items}
+          handleEnd={props.end}
+          owner={props.owner}
+          handleBid={props.handleBid}
+          handleWithdrawBid={props.handleWithdrawBid} 
+        />
+        
+      }
+      <p>Your account: {props.account}</p>
+    </div>
+  )
 }
+export default memo(Content);

@@ -1,109 +1,101 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Wrapper } from 'components/wrapper'
 import { AppNavigation } from 'components/navigation'
 import Content from './contents/Content'
 
-// Demonstration of a basic dapp with the withWeb3 higher-order component
-class Bidding extends React.Component {
+export const Bidding = (props) => {
+    const [account, setAccount] = useState(props.accounts[0]);
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [bidding, setBidding] = useState(false);
+    const [owner] = useState(false);
 
-  constructor(props){
-    super(props)
-    this.state = {
-      account: '0x0',
-      items: [],
-      loading: true,
-      bidding: false,
-      ended: false,
-      owner: false,
-      endedCounter: 0
+  useEffect (() => {
+    const getItems = async () => {
+      const { accounts, contract } = props
+      setAccount(accounts[0]);
+      setLoading(true);
+      watchEvents();
+      const response = await contract.itemsCount();
+      const items = [];
+        for (var i = 1; i <= response; i++) {
+          await contract.items(i).then((item) => {
+            const userAccount = account.toLowerCase();
+            const itemOwner = item[1];
+            if(itemOwner !== userAccount) {
+              items.push({
+                id: item[0],
+                itemOwner: item[1],
+                name: item[2],
+                bidValueDollar: item[3],
+                bidValueStarting: item[4],
+                bidValueWei: item[7],
+                ended: item[6]
+              });
+            }
+            setItems(items);
+          });
+        }
+      setLoading(false);
     }
-    this.bid = this.bid.bind(this)
-    this.watchEvents = this.watchEvents.bind(this)
-    this.withdraw = this.withdraw.bind(this)
-  }
+    getItems();
+  }, [bidding]);
 
-  async componentDidMount () {
-     await this.getItems()
-  }
+  
 
-  getItems = async () => {
-    const { accounts, contract } = this.props
-    this.setState({account: accounts[0], loading: true})
-    this.watchEvents();
-    const response = await contract.itemsCount()
-    const items = []
-    var endCount = 0
-      for (var i = 1; i <= response; i++) {
-        await contract.items(i).then((item) => {
-          const account = this.state.account.toLowerCase()
-          const itemOwner = item[1]
-          if(itemOwner !== account) {
-            items.push({
-              id: item[0],
-              itemOwner: item[1],
-              name: item[2],
-              bidValueDollar: item[3],
-              bidValueStarting: item[4],
-              bidValueWei: item[7],
-              ended: item[6]
-            });
-          }
-          this.setState({ items: items })
-        });
-      }
-    this.setState({ loading: false })
-  }
-
-  watchEvents() {
-    const { contract } = this.props
+  const watchEvents = () => {
+    const { contract } = props
     // TODO: trigger event when bid is counted, not when component renders
-    contract.bidEvent({}, {
+    contract.bidEvent({
       fromBlock: 0,
       toBlock: 'latest'
     }).watch((error, event) => {
-      this.setState({ bidding: false })
+      setBidding(false)
     })
   }
 
-  convertDollarsToWei(dollar) {
+  const convertDollarsToWei = (dollar) => {
     return dollar * 0.0032;
   }
 
-  bid = async (itemId, newbidValue) => {
+  const handleBid = async (itemId, newbidValue) => {
+    setBidding(true);
     const { 
       web3,
       accounts,
       contract,
       //secondaccounts
-    } = this.props
-    this.setState({ account: accounts[0] })
-    var totalPriceInEther = this.convertDollarsToWei(newbidValue);
+    } = props
+    setAccount(accounts[0])
+    var totalPriceInEther = convertDollarsToWei(newbidValue);
     if(itemId) {
-      if(this.state.items[itemId-1].bidValueDollar.toNumber() < newbidValue && this.state.items[itemId-1].bidValueStarting.toNumber() < newbidValue) {
-          contract.bid(itemId, newbidValue,
-            { 
-              from: this.state.account,
-              // to: secondaccounts[2],
-              value: web3.utils.toWei(""+totalPriceInEther, 'ether')
-              // ,
-              // gas: 300000,
-              // data: contract.address
-           })
-          this.getItems()
+      if(items[itemId-1].bidValueDollar.toNumber() < newbidValue && items[itemId-1].bidValueStarting.toNumber() < newbidValue) {
+        setLoading(true);  
+        contract.bid(itemId, newbidValue,
+          { 
+            from: account,
+            // to: secondaccounts[2],
+            value: web3.utils.toWei(""+totalPriceInEther, 'ether')
+            // ,
+            // gas: 300000,
+            // data: contract.address
+          })
        } else {
         alert(`It seems that your bid does not exceed the highest bid.`)
+        setBidding(false);
        }
     } else {
       alert(`Please select an item.`)
+      setBidding(false);
     }
   }
 
-  withdraw = async () => {
-    const { accounts,contract } = this.props
-    this.setState({ account: accounts[0] })
-    var data = await contract.withdrawAmount({from: this.state.account})
+  const handleWithdraw = async () => {
+    const { accounts,contract } = props
+    setAccount(accounts[0] )
+    var data = await contract.withdrawAmount({from: account})
       if(data) {
-        var result = await contract.withdraw({ from: this.state.account })
+        var result = await contract.withdraw({ from: account })
           const data = result
           if(data) {
             alert('successfully withdrawn')
@@ -115,25 +107,22 @@ class Bidding extends React.Component {
       }
   }
 
-  render () {
     return (
       <Wrapper>
         <h1> Bid For Me</h1>
         <br/>
-        { this.state.loading
+        { loading
           ? <p className='text-center'>Loading...</p>
           : <Content
-              account={this.state.account}
-              items={this.state.items}
-              owner={this.state.owner}
-              bid={this.bid}
-              withdrawBId={this.withdraw}
+              account={account}
+              items={items}
+              owner={owner}
+              handleBid={handleBid}
+              handleWithdrawBid={handleWithdraw}
             />
         }
-        <AppNavigation location={this.props.location} />
+        <AppNavigation location={props.location} />
       </Wrapper>
     )
   }
-}
 
-export { Bidding }

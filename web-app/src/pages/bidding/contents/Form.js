@@ -1,90 +1,84 @@
-import React, { Component } from 'react'
+import React, { useState, memo } from 'react'
 
-export default class form extends Component {
-    constructor(props) {
-        super(props)
+ const Form = (props) => {
+    const [values, setValues] = useState({
+        bid: 0,
+        item: 0
+    });
 
-        this.state = {
-            item: 0,
-            bid: 0,
-        }
+    const handleOnChange = (event) => {
+        const {name, value} = event.target
+        setValues({...values, [name]: value})
     }
 
-    handleOnChange = (event) => {
-        this.setState({
-            [event.target.name]: event.target.value
-        })
-    }
-
-    handleSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
-        if (this.props.owner) {
-            this.props.end(this.state.item)
+        if (props.owner) {
+            props.handleEnd(values.item)
         } else {
-            this.props.bid(this.state.item, this.state.bid)
+            props.handleBid(values.item, values.bid)
         }
     }
 
-    handleOnClick = (event) => {
+    const handleOnClick = (event) => {
         event.preventDefault();
-        this.props.withdrawBId()
+        props.handleWithdrawBid()
     }
 
-    render() {
-        return ( 
-        <form onSubmit = { this.handleSubmit } >
-            <div className = 'form-group' >
-            <label > Select Item </label> 
-            <select 
-                value = { this.state.selectedItem }
-                name = "item"
-                onChange = { this.handleOnChange }
-                className = 'form-control' 
-            >
-                <option value = "" > Select an option </option> 
-                {this.props.items.map((item) => {
-                    return (!item.ended &&
-                        <option 
-                            key = { item.id }
-                            value = { item.id }
-                        >{ item.name }
-                        </option>
-                    )
-                })} 
-            </select> 
-            </div> 
-            {this.props.owner ?
-                <div>
-                    <button 
-                        type = 'submit'
-                        className = 'btn btn-primary'
-                    >End Auction
-                    </button>
-                    <hr/>
-                </div>  : 
-                <div>
-                    <input
-                        type = "number"
-                        name = "bid"
-                        value = { this.state.bidValueDollar }
-                        onChange = { this.handleOnChange }
-                    />
-                    <button 
-                        type='submit'
-                        className = 'btn btn-primary'
-                    > Bid 
-                    </button>
-                    <span> | </span>
-                    <button 
-                        type='button'
-                        className = 'btn btn-primary'
-                        onClick={this.handleOnClick}
-                    > Withdraw
-                    </button>
-                    <hr/>
-                </div>
-            } 
-        </form>
-        )
-    }
+    return ( 
+    <form onSubmit = { handleSubmit } >
+        <div className = 'form-group' >
+        <label > Select Item </label> 
+        <select 
+            value = { values.item }
+            name = "item"
+            onChange = { handleOnChange }
+            className = 'form-control' 
+        >
+            <option value = "" > Select an option </option> 
+            {props.items.map((item) => {
+                return (!item.ended &&
+                    <option 
+                        key = { item.id }
+                        value = { item.id }
+                    >{ item.name }
+                    </option>
+                )
+            })} 
+        </select> 
+        </div> 
+        {props.owner ?
+            <div>
+                <button 
+                    type = 'submit'
+                    className = 'btn btn-primary'
+                >End Auction
+                </button>
+                <hr/>
+            </div>  : 
+            <div>
+                <input
+                    type = "number"
+                    name = "bid"
+                    value = { values.bid }
+                    onChange = { handleOnChange }
+                />
+                <button 
+                    type='submit'
+                    className = 'btn btn-primary'
+                > Bid 
+                </button>
+                <span> | </span>
+                <button 
+                    type='button'
+                    className = 'btn btn-primary'
+                    onClick={ handleOnClick }
+                > Withdraw
+                </button>
+                <hr/>
+            </div>
+        } 
+    </form>
+    )
 }
+export default memo(Form);

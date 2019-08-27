@@ -1,141 +1,84 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Wrapper } from 'components/wrapper'
 import { AppNavigation } from 'components/navigation'
 import Content from '../bidding/contents/Content'
 
-// Demonstration of a basic dapp with the withWeb3 higher-order component
-class ItemOwner extends React.Component {
+export const ItemOwner = (props) => {
+  const [account, setAccount] = useState(props.accounts[0]);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [ended, setEnded] = useState(false);
+  const [owner] = useState(true);
 
-  constructor(props){
-    super(props)
-    this.state = {
-      account: '0x0',
-      items: [],
-      loading: true,
-      bidding: false,
-      ended: false,
-      owner: true
+  useEffect (() => {
+    const getItems = async () => {
+      const { accounts, contract } = props
+      setAccount(accounts[0])
+      setLoading(true);
+      watchEvents();
+      const response = await contract.itemsCount()
+      const items = []
+        for (var i = 1; i <= response; i++) {
+          await contract.items(i).then((item) => {
+            const userAccount = account.toLowerCase()
+            const itemOwner = item[1]
+            if(itemOwner === userAccount && !item[6]) {
+              items.push({
+                id: item[0],
+                itemOwner: item[1],
+                name: item[2],
+                bidValueDollar: item[3],
+                bidValueStarting: item[4],
+                ended: item[6],
+                bidValueWei: item[7],
+              });
+            }
+            setItems(items);
+          });
+        }
+        setLoading(false);
     }
-    this.watchEvents = this.watchEvents.bind(this)
-    this.endAuction = this.endAuction.bind(this)
-  }
+    getItems();
+  }, [ended])
 
-  async componentDidMount () {
-    const { accounts, contract } = this.props
-    this.setState({account: accounts[0], loading: true})
-    this.watchEvents();
-    const response = await contract.itemsCount()
-    const items = []
-      for (var i = 1; i <= response; i++) {
-        await contract.items(i).then((item) => {
-          const account = this.state.account.toLowerCase()
-          const itemOwner = item[1]
-          if(itemOwner === account && !item[6]) {
-            items.push({
-              id: item[0],
-              itemOwner: item[1],
-              name: item[2],
-              bidValueDollar: item[3],
-              bidValueStarting: item[4],
-              ended: item[6],
-              bidValueWei: item[7],
-            });
-          }
-          this.setState({ items: items })
-        });
-      }
-      this.setState({ loading: false })
-  }
-
-  getValues = async () => {
-    const { accounts, contract } = this.props
-    this.setState({account: accounts[0], loading: true})
-    this.watchEvents();
-    const response = await contract.itemsCount()
-    this.state.items = [];
-    var endCount = 0
-      for (var i = 1; i <= response; i++) {
-        await contract.items(i).then((item) => {
-          const account = this.state.account.toLowerCase()
-          const itemOwner = item[1]
-          const items = [...this.state.items]
-          if(itemOwner === account) {
-            items.push({
-              id: item[0],
-              itemOwner: item[1],
-              name: item[2],
-              bidValueDollar: item[3],
-              bidValueStarting: item[4],
-              ended: item[6],
-              bidValueWei: item[7],
-            });
-          }
-          if(item[6]) {
-            endCount++
-          }
-          this.setState({ 
-            items: items,
-            endedCounter: endCount 
-          })
-        });
-      }
-      this.setState({ loading: false })
-  }
-
-  watchEvents() {
-    const { contract } = this.props
-    // TODO: trigger event when vote is counted, not when component renders
+  const watchEvents= () => {
+    const { contract } = props
     contract.bidEvent({}, {
       fromBlock: 0,
       toBlock: 'latest'
     }).watch((error, event) => {
-      this.setState({ bidding: false })
+      setEnded(false);
     })
   }
 
-  endAuction = async (itemId) =>  {
+  const endAuction = async (itemId) =>  {
     const { 
       accounts,
       contract,
      // secondaccounts
-    } = this.props
-
-    this.setState({ 
-      account: accounts[0], 
-      ended: true
-     })
+    } = props
+    setAccount(accounts[0]);
+    setEnded(true);
+    setLoading(true);
     contract.auctionEnd(itemId,
       { 
-        from: this.state.account
-     })
+        from: account
+      })
   }
 
-  render () {
     return (
       <Wrapper>
         <h1> Bid For Me</h1>
         <br/>
-        { this.state.loading
+        { loading
           ? <p className='text-center'>Loading...</p>
           : <Content
-              account={this.state.account}
-              items={this.state.items}
-              owner={this.state.owner}
-              end={this.endAuction} />
+              account={account}
+              items={items}
+              owner={owner}
+              end={endAuction} />
         }
-        <AppNavigation location={this.props.location} />
+        <AppNavigation location={props.location} />
       </Wrapper>
     )
-  }
 }
-
-// const P = ({ children }) =>
-//   <p style={{ display: 'inline-block', marginBottom: '20px' }}>{ children }</p>
-
-// const Button = ({ children, leftMargin, ...rest }) => (
-//   leftMargin
-//     ? <button style={{ marginLeft: '20px' }} {...rest}>{ children }</button>
-//     : <button {...rest}>{ children }</button>
-// )
-
-export { ItemOwner }
