@@ -15,12 +15,11 @@ export const Bidding = (props) => {
       const { accounts, contract } = props
       setAccount(accounts[0]);
       setLoading(true);
-      watchEvents();
       const response = await contract.itemsCount();
       const items = [];
-        for (var i = 1; i <= response; i++) {
+      const userAccount = account.toLowerCase();
+        for (var i = 1; i <= response.toNumber(); i++) {
           await contract.items(i).then((item) => {
-            const userAccount = account.toLowerCase();
             const itemOwner = item[1];
             if(itemOwner !== userAccount) {
               items.push({
@@ -41,19 +40,6 @@ export const Bidding = (props) => {
     getItems();
   }, [bidding]);
 
-  
-
-  const watchEvents = () => {
-    const { contract } = props
-    // TODO: trigger event when bid is counted, not when component renders
-    contract.bidEvent({
-      fromBlock: 0,
-      toBlock: 'latest'
-    }).watch((error, event) => {
-      setBidding(false)
-    })
-  }
-
   const convertDollarsToWei = (dollar) => {
     return dollar * 0.0032;
   }
@@ -71,7 +57,7 @@ export const Bidding = (props) => {
     if(itemId) {
       if(items[itemId-1].bidValueDollar.toNumber() < newbidValue && items[itemId-1].bidValueStarting.toNumber() < newbidValue) {
         setLoading(true);  
-        contract.bid(itemId, newbidValue,
+        var result = await contract.bid(itemId, newbidValue,
           { 
             from: account,
             // to: secondaccounts[2],
@@ -80,6 +66,13 @@ export const Bidding = (props) => {
             // gas: 300000,
             // data: contract.address
           })
+          const data = result
+        if(data) {
+          alert('Bid Added')
+          setBidding(false)
+        } else {
+          alert('Error bid.')
+        }
        } else {
         alert(`It seems that your bid does not exceed the highest bid.`)
         setBidding(false);
@@ -92,7 +85,7 @@ export const Bidding = (props) => {
 
   const handleWithdraw = async () => {
     const { accounts,contract } = props
-    setAccount(accounts[0] )
+    setAccount(accounts[0])
     var data = await contract.withdrawAmount({from: account})
       if(data) {
         var result = await contract.withdraw({ from: account })
@@ -109,7 +102,9 @@ export const Bidding = (props) => {
 
     return (
       <Wrapper>
-        <h1> Bid For Me</h1>
+        <div className="text-center">
+          <h1> Bid For Me</h1>
+        </div>
         <br/>
         { loading
           ? <p className='text-center'>Loading...</p>

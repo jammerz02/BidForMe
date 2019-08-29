@@ -11,7 +11,7 @@ export const Navigation = ({ location, children }) => {
   })
 
   return (
-    <div style={{marginTop: '20px'}}>
+    <div className="text-center" style={{marginTop: '20px'}}>
       { updatedChildren }
     </div>
   )

@@ -4,8 +4,13 @@ import { AppNavigation } from 'components/navigation'
 
 const Accounts = ({ accounts, location }) =>
   <Wrapper>
-    <h1>My Accounts</h1>
-    <pre>{JSON.stringify(accounts, null, 4)}</pre>
+    <div className="text-center">
+      <h1>My Accounts</h1>
+    </div>
+    <div className="text-center"x>
+      <pre>{JSON.stringify(accounts, null, 4)}</pre>
+    </div>
+    
     <AppNavigation location={location} />
   </Wrapper>
 

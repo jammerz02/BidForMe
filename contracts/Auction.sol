@@ -39,14 +39,16 @@ contract Auction {
         addItem("Vincent Van Gogh - The Starry Night", 500);
     }
 
-    function addItem(string memory _name, uint _bidStarting) private {
+    function addItem(string memory _name, uint _bidStarting) public returns (bool) {
         address payable itemOwner = msg.sender;
         address payable highestBidder = address(0x0);
         itemsCount++;
         items[itemsCount] = Item(itemsCount, itemOwner, _name, 0, _bidStarting, highestBidder, false, 0);
+
+        return true;
     }
 
-    function bid (uint _ItemId, uint _bidAmount) public payable {
+    function bid (uint _ItemId, uint _bidAmount) public payable returns (bool) {
         // require first time bidder address - error if not
         require(msg.sender != items[_ItemId].highestBidder,"error bidder have already bid");
 
@@ -76,6 +78,8 @@ contract Auction {
 
         // trigger bidding event
         emit bidEvent(_ItemId, msg.sender, _bidAmount, msg.value);
+
+        return true;
     }
 
     function withdraw() public payable returns (bool) {

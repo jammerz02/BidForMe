@@ -1,5 +1,54 @@
+
+/* Index.js */
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+
+/* Form.js */
+.btn {
+  width: 100%;
+  margin: 10px 0 !important;
+}
+
+.btn-full {
+  height: 100% !important;
+}
+
+.form-control {
+  margin: 10px 0 !important;
+}
+
+.full-width {
+  height: 75%;
+  margin: 5px 0;
+}
+
+label {
+  line-height: 50px !important;
+  height: 50px;
+}
+
+.modal-margin {
+  margin: 10px !important;
+}
+
+@media screen and (max-width: 991px) {
+  .btn-full {
+    height: unset;
+  }
+
+  .form-control {
+    margin: 10px 0 !important;
+  }
+
+  .full-width {
+    height: unset;
+    margin: 0;
+  }
+
+  .rm-padding {
+    padding: 0 !important;
+  }
 }

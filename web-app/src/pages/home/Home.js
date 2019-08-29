@@ -4,8 +4,10 @@ import { AppNavigation } from 'components/navigation'
 
 const Home = ({ location }) =>
   <Wrapper>
-    <h1>Home</h1>
-    <p>Note that Web3 is already loaded.</p>
+    <div className="text-center">
+      <h1>Home</h1>
+    </div>
+    <p className="text-center">Note that Web3 is already loaded.</p>
     <AppNavigation location={location} />
   </Wrapper>
 
