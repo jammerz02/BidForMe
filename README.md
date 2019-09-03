@@ -11,6 +11,8 @@ This project is a sample project for ethereum. It uses Solidity as its backend a
 
     npm install
 
+    truffle migrate --reset --compile-all
+
 2. Launch development server, and open localhost:3000 in your browser:
 
     sh
@@ -20,72 +22,72 @@ This project is a sample project for ethereum. It uses Solidity as its backend a
 
 # Project Structure
     ├──contracts
-        ├── Auction.sol  
-        └── Migrations.sol
+    │   ├── Auction.sol 
+    │   └── Migrations.sol
     ├── migrations
-        ├── 1_initial_migration.js
-        └── 2_deploy_contracts.js
+    │   ├── 1_initial_migration.js
+    │   └── 2_deploy_contracts.js
     ├── test
-        └── auction.js
-    ├── web-app
+    │   └── auction.js
+    └── web-app
         ├── public
-            ├── favicon.ico
-            ├── index.html
-            └── manifest.json
+        │   ├── favicon.ico
+        │   ├── index.html
+        │   └── manifest.json
         ├── src
-            ├── build
-                └── contracts
-                    ├── Auction.json
-                    └── Migrations.json
-            ├── components
-                ├── confirmation
-                    └── Confirmation.js
-                ├── navigation
-                    ├── AppNavigation.js
-                    ├── index.js
-                    └── Navigation.js
-                ├── web3
-                    + index.js
-                    └── Web3Loader.js
-                └── wrapper
-                    ├── index.js
-                    └── Wrapper.js
-            ├── pages
-                ├── accounts
-                    ├── Accounts.js
-                    └── index.js
-                ├── bidding
-                    ├── contents
-                        ├── Content.js
-                        ├── Form.js
-                        └── Table.js
-                    ├── Bidding.js
-                    └── index.js
-                ├── home
-                    ├── Home.js
-                    └── index.js
-                ├── myItems
-                    ├── add-item
-                        └── AddItem.js
-                    ├── remove-item
-                        └── DeleteItem.js
-                    ├── update-item
-                        └── UpdateItem.js
-                    ├── index.js
-                    └── ItemOwner.js
-                └── notFound
-                    └── NoMatch.js
-            ├── services
-                └── web3
-                    ├── getWeb3.js
-                    ├── index.js
-                    └── utils.js
-            ├── test-helpers
-                └── router.js
-            ├── App.js
-            ├── index.css
-            ├── index.js
-            └── registerServiceWorker.js
+        │   ├── build
+        │   │   └── contracts
+        │   │       ├── Auction.json
+        │   │       └── Migrations.json
+        │   ├── components
+        │   │   ├── confirmation
+        │   │   │   └── Confirmation.js
+        │   │   ├── navigation
+        │   │   │   ├── AppNavigation.js
+        │   │   │   ├── index.js
+        │   │   │   └── Navigation.js
+        │   │   ├── web3
+        │   │   │   ├── index.js
+        │   │   │   └── Web3Loader.js
+        │   │   └── wrapper
+        │   │       ├── index.js
+        │   │       └── Wrapper.js
+        │   ├── pages
+        │   │   ├── accounts
+        │   │   │   ├── Accounts.js
+        │   │   │   └── index.js
+        │   │   ├── bidding
+        │   │   │   ├── contents
+        │   │   │   │   ├── Content.js
+        │   │   │   │   ├── Form.js
+        │   │   │   │   └── Table.js
+        │   │   │   ├── Bidding.js
+        │   │   │   └── index.js
+        │   │   ├── home
+        │   │   │   ├── Home.js
+        │   │   │   └── index.js
+        │   │   ├── myItems
+        │   │   │   ├── add-item
+        │   │   │   │   └── AddItem.js
+        │   │   │   ├── remove-item
+        │   │   │   │   └── DeleteItem.js
+        │   │   │   ├── update-item
+        │   │   │   │   └── UpdateItem.js
+        │   │   │   ├── index.js
+        │   │   │   └── ItemOwner.js
+        │   │   └── notFound
+        │   │       └── NoMatch.js
+        │   ├── services
+        │   │   └── web3
+        │   │       ├── getWeb3.js
+        │   │       ├── index.js
+        │   │       └── utils.js
+        │   ├── test-helpers
+        │   │   └── router.js
+        │   ├── App.js
+        │   ├── index.css
+        │   ├── index.js
+        │   └── registerServiceWorker.js
         ├── .env
         ├── .gitignore
         ├── package.json
