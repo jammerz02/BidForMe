@@ -7,7 +7,7 @@ const Accounts = ({ accounts, location }) =>
     <div className="text-center">
       <h1>My Accounts</h1>
     </div>
-    <div className="text-center"x>
+    <div className="text-center">
       <pre>{JSON.stringify(accounts, null, 4)}</pre>
     </div>
     
