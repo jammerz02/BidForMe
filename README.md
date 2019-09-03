@@ -11,13 +11,24 @@ This project is a sample project for ethereum. It uses Solidity as its backend a
 
     npm install
 
+
+2. Run Ganache. If you dont have it installed in your system click and install https://www.trufflesuite.com/ganache
+
+3. Create local network using Custom RPC.
+
+4. Migrate contract to server.
+
     truffle migrate --reset --compile-all
 
-2. Launch development server, and open localhost:3000 in your browser:
+5. Launch development server, and open localhost:3000 in your browser:
 
     sh
 
     npm start
+
+6. Open metamask and allow access to http://localhost:3000
+
+7. Import ganache accounts to metamast using private keys.
 
 
 # Project Structure
