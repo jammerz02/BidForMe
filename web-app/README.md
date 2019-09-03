@@ -21,9 +21,31 @@ Initial home page corresponding to the `/` url.
 
 This is a page listing the accounts returned from Web3. The `Accounts` component is stateless and expects `location` object from the `Router` and `accounts` from Web3. Both are injected in `App.js` component.
 
-### pages/dapp/DApp.js
+### pages/bidding/Bidding.js
+  
 
-The `DApp` components makes calls to the `contract` given in one of the props provided by `Web3` component.
+The `Bidding` component makes calls to the `contract` given in one of the props provided by `Web3` component. This component is used to bid for an item or withdraw its balance.
+
+these components are used to display some of the calls from the `contract` :
+- pages/bidding/contents/Content.js
+- pages/bidding/contents/Table.js
+- pages/bidding/contents/Form.js
+
+### pages/myItems/ItemOwner.js
+
+The `ItemOwner` component also makes calls to the `contract` given in one of the props provided by `Web3` component. 
+
+This component is used to:
+- `end auction` for an item,
+- `add` an item - pages/myItems/add-item/AddItem.js ,
+- `update` an item - pages/myItems/update-item/UpdateItem.js , and 
+- `delete` an item - pages/myItems/remove-item/DeleteItem.js .
+
+these components are also used to display some of the calls from the `contract` :
+- pages/bidding/contents/Content.js
+- pages/bidding/contents/Table.js
+- pages/bidding/contents/Form.js
+
 
 ## components
 
