@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
+    "start":"cd web-app && npm start",
     "test": "cd web-app && yarn test",
     "lint": "standard | snazzy",
     "lint-fix": "standard --fix --verbose | snazzy"
