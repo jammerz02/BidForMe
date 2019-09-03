@@ -9,6 +9,7 @@ export const Bidding = (props) => {
     const [loading, setLoading] = useState(false);
     const [bidding, setBidding] = useState(false);
     const [owner] = useState(false);
+    const [itemOwner, setItemOwner] = useState();
 
   useEffect (() => {
     const getItems = async () => {
@@ -17,21 +18,23 @@ export const Bidding = (props) => {
       setLoading(true);
       const response = await contract.itemsCount();
       const items = [];
-      const userAccount = account.toLowerCase();
+      if(account) {
+        setItemOwner(account.toLowerCase())
+      } else {
+        alert('Failed to load account. Please make sure you shared the address to metamask to proceed, if error still occurs please check console for details.')
+      }
         for (var i = 1; i <= response.toNumber(); i++) {
           await contract.items(i).then((item) => {
-            const itemOwner = item[1];
-            if(itemOwner !== userAccount) {
-              items.push({
-                id: item[0],
-                itemOwner: item[1],
-                name: item[2],
-                bidValueDollar: item[3],
-                bidValueStarting: item[4],
-                bidValueWei: item[7],
-                ended: item[6]
-              });
-            }
+            items.push({
+              id: item[0],
+              itemOwner: item[1],
+              itemId: item[2],
+              name: item[3],
+              bidValueDollar: item[4],
+              bidValueStarting: item[5],
+              bidValueWei: item[8],
+              ended: item[7]
+            });
             setItems(items);
           });
         }
@@ -49,22 +52,20 @@ export const Bidding = (props) => {
     const { 
       web3,
       accounts,
-      contract,
-      //secondaccounts
+      contract
     } = props
     setAccount(accounts[0])
     var totalPriceInEther = convertDollarsToWei(newbidValue);
     if(itemId) {
-      if(items[itemId-1].bidValueDollar.toNumber() < newbidValue && items[itemId-1].bidValueStarting.toNumber() < newbidValue) {
-        setLoading(true);  
-        var result = await contract.bid(itemId, newbidValue,
-          { 
+      var dollar = items[itemId-1].bidValueDollar.toNumber()
+      var starting = items[itemId-1].bidValueStarting.toNumber()
+      var id = items[itemId-1].id.toNumber()
+      if( dollar < newbidValue && starting < newbidValue) {
+        setLoading(true);
+        var result = await contract.bid(id, newbidValue,
+          {
             from: account,
-            // to: secondaccounts[2],
             value: web3.utils.toWei(""+totalPriceInEther, 'ether')
-            // ,
-            // gas: 300000,
-            // data: contract.address
           })
           const data = result
         if(data) {
@@ -73,10 +74,10 @@ export const Bidding = (props) => {
         } else {
           alert('Error bid.')
         }
-       } else {
+      } else {
         alert(`It seems that your bid does not exceed the highest bid.`)
         setBidding(false);
-       }
+      }
     } else {
       alert(`Please select an item.`)
       setBidding(false);
@@ -87,17 +88,17 @@ export const Bidding = (props) => {
     const { accounts,contract } = props
     setAccount(accounts[0])
     var data = await contract.withdrawAmount({from: account})
-      if(data) {
-        var result = await contract.withdraw({ from: account })
-          const data = result
-          if(data) {
-            alert('successfully withdrawn')
-          } else {
-            alert('withdraw failed')
-          }
-      } else {
-        alert("you don't have any balance")
-      }
+    if(data) {
+      var result = await contract.withdraw({ from: account })
+        const data = result
+        if(data) {
+          alert('successfully withdrawn')
+        } else {
+          alert('withdraw failed')
+        }
+    } else {
+      alert("you don't have any balance")
+    }
   }
 
     return (
@@ -112,6 +113,7 @@ export const Bidding = (props) => {
               account={account}
               items={items}
               owner={owner}
+              itemOwner={itemOwner}
               handleBid={handleBid}
               handleWithdrawBid={handleWithdraw}
             />

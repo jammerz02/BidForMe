@@ -30,6 +30,34 @@ label {
   height: 50px;
 }
 
+.btn-update {
+  height: 30px;
+  width: 30px;
+  margin-left: 10px;
+  border-radius: 50%;
+  background-color: rgb(238, 218, 162);
+  
+}
+.btn-update button.btn.btn-link {
+  color: rgb(59, 59, 59);
+  margin: -6px 0 0 -9px !important;
+  width: 50px;
+}
+
+.btn-delete {
+  height: 30px;
+  width: 30px;
+  margin-left: 10px;
+  border-radius: 50%;
+  background-color: rgb(235, 128, 128);
+}
+
+.btn-delete button.btn.btn-link {
+  color: rgb(59, 59, 59);
+  margin: -6px 0 0 -10px !important;
+  width: 50px;
+}
+
 .modal-margin {
   margin: 10px !important;
 }

@@ -5,6 +5,7 @@ contract Auction {
     struct Item {
         uint id;
         address payable ItemOwner;
+        uint itemsOwned;
         string name;
         uint bidValueDollar;
         uint bidValueStarting;
@@ -14,12 +15,13 @@ contract Auction {
     }
 
     // Store accounts that have bids
+    mapping(address => uint) itemOwned;
     mapping(address => uint) pendingReturns;
     mapping(uint => Item) public items;
-    uint public itemsCount;
 
-    address payable lastBidder;
+    uint public itemsCount;
     uint public highestBid;
+    address payable lastBidder;
 
     // bid event
     event bidEvent (
@@ -35,17 +37,44 @@ contract Auction {
     );
 
     constructor() public {
-        addItem("Vintage Watch", 200);
-        addItem("Vincent Van Gogh - The Starry Night", 500);
     }
 
     function addItem(string memory _name, uint _bidStarting) public returns (bool) {
         address payable itemOwner = msg.sender;
+        itemOwned[msg.sender] += 1;
         address payable highestBidder = address(0x0);
         itemsCount++;
-        items[itemsCount] = Item(itemsCount, itemOwner, _name, 0, _bidStarting, highestBidder, false, 0);
+        items[itemsCount] = Item(itemsCount, itemOwner, itemOwned[msg.sender], _name, 0, _bidStarting, highestBidder, false, 0);
 
         return true;
+    }
+
+    function updateItem(uint _ItemId, string memory _name, uint _bidStarting) public returns (bool) {
+        // require a valid item id
+        require(_ItemId > 0 && _ItemId <= itemsCount,"selected item is invalid");
+        // require Item owner
+        require(msg.sender == items[_ItemId].ItemOwner,"You are not the owner of this auction.");
+
+        items[_ItemId].name = _name;
+        items[_ItemId].bidValueStarting = _bidStarting;
+
+        return true;
+    }
+
+    function removeItem(uint index) public returns (bool) {
+        if (index <= itemsCount) {
+            for (uint i = index; i <= itemsCount; i++) {
+                items[i].id = items[i+1].id - 1;
+                items[i].ItemOwner = items[i+1].ItemOwner;
+                items[i].itemsOwned = items[i+1].itemsOwned - 1;
+                items[i].name = items[i+1].name;
+                items[i].bidValueStarting = items[i+1].bidValueStarting;
+            }
+            itemOwned[msg.sender] -= 1;
+            itemsCount--;
+
+            return true;
+        }
     }
 
     function bid (uint _ItemId, uint _bidAmount) public payable returns (bool) {
@@ -104,7 +133,7 @@ contract Auction {
         }
     }
 
-    function auctionEnd (uint _ItemId) public payable {
+    function auctionEnd (uint _ItemId) public payable returns (bool) {
         // require Item auction is not yet ended
         require(!items[_ItemId].ended,"You already ended this auction.");
 
@@ -129,5 +158,7 @@ contract Auction {
 
         //  tranfer highest bid to owner of bid
         msg.sender.transfer(highestBid);
+
+        return true;
     }
 }

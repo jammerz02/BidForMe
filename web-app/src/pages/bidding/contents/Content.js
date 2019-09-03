@@ -12,21 +12,27 @@ const Content = (props) => {
             props.owner ? 
             <div>
               <AddItem
-                modalShow={props.modalShow}
-                onHide={props.modalShow}
                 handleAddItem={props.handleAddItem}
               />
             </div> 
             : <div></div>
           }
         </div>
-      <Table key={props.items.id} items={props.items} />
+      <Table 
+        key={props.items.id} 
+        items={props.items} 
+        handleUpdateItem={props.handleUpdateItem}
+        handleDeleteItem={props.handleDeleteItem}
+        owner={props.owner}
+        itemOwner={props.itemOwner}
+      />
       <hr/>
       { 
         <Form 
           items={props.items}
           handleEndAuction={props.handleEndAuction}
           owner={props.owner}
+          itemOwner={props.itemOwner}
           handleBid={props.handleBid}
           handleWithdrawBid={props.handleWithdrawBid}
           handleAddItem={props.handleAddItem}
