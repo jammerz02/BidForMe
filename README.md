@@ -7,10 +7,9 @@ This project is a sample project for ethereum. It uses Solidity as its backend a
 
 1. Go to project folder and install dependencies:
 
-    sh
-
+    ```cmd
     npm install
-
+    ```
 
 2. Run Ganache. If you dont have it installed in your system click and install https://www.trufflesuite.com/ganache
 
@@ -18,17 +17,28 @@ This project is a sample project for ethereum. It uses Solidity as its backend a
 
 4. Migrate contract to server.
 
+    ```cmd
     truffle migrate --reset --compile-all
+    ```
 
-5. Launch development server, and open localhost:3000 in your browser:
+5. Download Metamask extension on your browser. 
+    
+    For Chrome: https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn
 
-    sh
+    For Mozilla Firefox: 
+    https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/ 
 
+6. Launch development server
+
+    ```cmd
     npm start
+    ```
 
-6. Open metamask and allow access to http://localhost:3000
+7. Open http://localhost:3000 on your browser.
 
-7. Import ganache accounts to metamast using private keys.
+8. Open metamask and allow access to http://localhost:3000
+
+9. Import ganache accounts to metamask using private keys.
 
 
 # Project Structure
