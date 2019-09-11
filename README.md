@@ -11,22 +11,22 @@ This project is a sample project for ethereum. It uses Solidity as its backend a
     npm install
     ```
 
-2. Run Ganache. If you dont have it installed in your system click and install https://www.trufflesuite.com/ganache
+2. Run Ganache. If you dont have it installed in your system, download from: https://www.trufflesuite.com/ganache
 
-3. Create local network using Custom RPC.
-
-4. Migrate contract to server.
+3. Migrate contract to server.
 
     ```cmd
     truffle migrate --reset --compile-all
     ```
 
-5. Download Metamask extension on your browser. 
+4. Download Metamask extension on your browser. 
     
     For Chrome: https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn
 
     For Mozilla Firefox: 
     https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/ 
+
+5. Open Metamask and create local network using Custom RPC.
 
 6. Launch development server
 
