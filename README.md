@@ -5,15 +5,34 @@ This project is a sample project for ethereum. It uses Solidity as its backend a
 
 # Getting Started
 
-1. Run Ganache and click **`Quickstart`**. If you dont have it installed in your system, download from: https://www.trufflesuite.com/ganache
+1. Install Truffle. See https://www.trufflesuite.com/docs/truffle/getting-started/installation for more details about truffle.
 
-2. Go to project folder and migrate contract to server.
+    ```cmd 
+    npm install -g truffle
+    ```
+
+2. Install python from https://www.python.org/downloads/release/python-374/ and add it to your PATH in the Environment Variables.
+
+3. Run Ganache and click **`Quickstart`**. If you dont have it installed in your system, download from: https://www.trufflesuite.com/ganache
+
+4. Download Metamask extension and manually install it. 
+See https://metamask.zendesk.com/hc/en-us/articles/360015489471-How-to-Install-MetaMask-Manually
+
+    For Chrome: https://github.com/MetaMask/metamask-extension/releases/download/v7.0.1/metamask-chrome-7.0.1.zip
+
+    For Mozilla Firefox: 
+    https://github.com/MetaMask/metamask-extension/releases/download/v7.0.1/metamask-firefox-7.0.1.zip
+
+    >Note: Due to the errors of new version of metamask, we will use the v7.0.1.
+
+
+5. Go to project folder and migrate contract to server.
 
     ```cmd
     truffle migrate --reset --compile-all
     ```
 
-3. Go to project folder **`web-app`** and install dependencies:
+6. Go to project folder **`web-app`** and install dependencies:
 
     ```cmd
     cd web-app
@@ -21,26 +40,19 @@ This project is a sample project for ethereum. It uses Solidity as its backend a
     npm install
     ```
 
-4. Download Metamask extension on your browser. 
-    
-    For Chrome: https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn
+7. Open Metamask and create local network using Custom RPC with the same port as `Ganache`.
 
-    For Mozilla Firefox: 
-    https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/ 
-
-5. Open Metamask and create local network using Custom RPC with the same port as `Ganache`.
-
-6. Launch development server
+8. Launch development server
 
     ```cmd
     npm start
     ```
 
-7. Open http://localhost:3000 on your browser.
+9. Open http://localhost:3000 on your browser.
 
-8. Open metamask and allow access to http://localhost:3000
+10. Open metamask and allow access to http://localhost:3000
 
-9. Import ganache accounts to metamask using private keys.
+11. Import ganache accounts to metamask using private keys.
 
 
 # Project Structure
@@ -263,7 +275,3 @@ Such a `package.json` would contain only one attribute pointing out to the main 
   "main": "Accounts.js"
 }
 ```
-
-
-
-

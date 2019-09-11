@@ -21,7 +21,7 @@ export const ItemOwner = (props) => {
       if(account) {
         setItemOwner(account.toLowerCase())
       } else {
-        alert('Failed to load account. Please make sure you shared the address to metamask to proceed, if error still occurs please check console for details.')
+        alert('Failed to load account. Please make sure you shared the address to metamask to proceed.')
       }
         for (var i = 1; i <= response.toNumber(); i++) {
           await contract.items(i).then((item) => {

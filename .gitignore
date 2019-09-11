@@ -1,0 +1,32 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# Compiled output
+.web-app/*
+!.web-app/src/build/contracts
+!.web-app/.yarn.lock
+!.web-app/.package-lock.json
+
+
+# Dependencies
+!.web-app/node_modules
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Misc
+.truffle-config.js
+.travis.yml
+.box-img-lg-template.png
+.box-img-sm-template.png
+.package-lock.json
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Env
+/web-app/.env
